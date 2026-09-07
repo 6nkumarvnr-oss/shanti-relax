@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* MeiVeeram serene palette — deep green & soft gold */
+    --background: 155 65% 7%;           /* #06170f */
+    --foreground: 140 20% 96%;
+    --card: 152 48% 11%;
+    --card-foreground: 140 20% 96%;
+    --popover: 153 55% 9%;
+    --popover-foreground: 140 20% 96%;
+    --primary: 44 80% 46%;             /* #D4A017 gold */
+    --primary-foreground: 155 65% 7%;
+    --secondary: 152 30% 15%;
+    --secondary-foreground: 140 20% 96%;
+    --muted: 152 30% 15%;
+    --muted-foreground: 145 12% 68%;
+    --accent: 160 45% 30%;             /* calm green accent */
+    --accent-foreground: 140 20% 96%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 150 25% 18%;
+    --input: 150 25% 16%;
+    --ring: 44 80% 46%;
+    --radius: 0.75rem;
+  }
+}
+
+html, body {
+  height: 100%;
+  overscroll-behavior-y: none;
+  background: hsl(var(--background));
+}
+
+.app-shell {
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: hsl(var(--background));
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* serene ambient background */
+.aurora {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(500px circle at 50% -5%, hsl(var(--primary) / 0.08), transparent 65%),
+    radial-gradient(600px circle at 90% 100%, hsl(160 55% 20% / 0.35), transparent 70%),
+    radial-gradient(500px circle at 0% 90%, hsl(160 50% 18% / 0.3), transparent 70%);
+}
+
+/* floating calm particles */
+.particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: hsl(var(--primary) / 0.35);
+  animation: float-up linear infinite;
+  pointer-events: none;
+}
+@keyframes float-up {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  15%  { opacity: 0.8; }
+  100% { transform: translateY(-220px) scale(1); opacity: 0; }
+}
+
+/* breathing halo pulse (idle) */
+@keyframes halo-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50%      { transform: scale(1.06); opacity: 0.8; }
+}
+.halo-idle { animation: halo-breathe 8s ease-in-out infinite; transform-origin: center; }
+
+/* session card entrance */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-in { animation: card-in 0.3s ease-out both; }
+
+/* gentle pulse for the talk (mic) button */
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.35); }
+  70%      { box-shadow: 0 0 0 18px hsl(var(--primary) / 0); }
+}
+.mic-live { animation: mic-pulse 1.6s ease-out infinite; }
+
+.chat-scroll::-webkit-scrollbar { width: 4px; }
+.chat-scroll::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .particle, .halo-idle, .mic-live { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
