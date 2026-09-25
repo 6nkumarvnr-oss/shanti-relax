@@ -9,7 +9,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { TalkingAvatar } from "@/components/relax/avatar";
+import { AvatarStage } from "@/components/relax/vrm-avatar";
 import type { Config } from "@/components/relax/relax-app";
 import { BREATHE_LABEL, SESSIONS, type Lang, type Step } from "@/lib/sessions";
 import { synthesize } from "@/lib/eleven";
@@ -197,7 +197,7 @@ export function RelaxHome({
 
       {/* avatar stage */}
       <section className="relative z-10 flex flex-col items-center justify-center flex-1 min-h-0 py-2">
-        <TalkingAvatar
+        <AvatarStage
           size={230}
           speaking={speaking}
           mouthOpen={mouthOpen}
