@@ -35,7 +35,7 @@ export function AvatarStage(props: AvatarProps) {
   }, []);
 
   if (hasVrm) return <VrmCanvas {...props} />;
-  if (hasVrm === false) return <TalkingAvatar {...props} />;
+  if (hasVrm === false) return <AvatarImage {...props} />;
   // brief checking state — render the halo frame so layout doesn't jump
   return <div style={{ width: props.size ?? 230, height: props.size ?? 230 }} />;
 }
@@ -192,4 +192,44 @@ function VrmCanvas({ size = 230, speaking, mouthOpen, breathPhase }: AvatarProps
     );
   }
   return <div ref={mountRef} style={{ width: size, height: size }} aria-hidden="true" />;
+}
+
+// ─────────────────────────────────────────────────────────────
+// AvatarImage — interim portrait of Shanti (matches the approved
+// reference image) shown until the real .vrm model arrives.
+// Falls back to the SVG face if the image fails to load, and is
+// replaced automatically once public/avatar.vrm exists.
+// ─────────────────────────────────────────────────────────────
+
+function AvatarImage({ size = 230, speaking, mouthOpen, breathPhase }: AvatarProps) {
+  const [imgOk, setImgOk] = useState(true);
+
+  if (!imgOk) {
+    return <TalkingAvatar size={size} speaking={speaking} mouthOpen={mouthOpen} breathPhase={breathPhase} />;
+  }
+
+  return (
+    <div className="relative flex items-center justify-center select-none" style={{ width: size, height: size }}>
+      {/* breathing halo — same rhythm as the SVG face */}
+      <div
+        className={`absolute inset-0 rounded-full transition-all duration-[4000ms] ease-in-out ${
+          breathPhase === 1 ? "scale-110" : "halo-idle"
+        }`}
+        style={{
+          background:
+            "radial-gradient(circle, hsl(44 80% 46% / 0.22) 0%, hsl(160 55% 25% / 0.18) 45%, transparent 70%)",
+        }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/shanti-avatar-interim.png"
+        alt="Shanti — virtual relaxation assistant"
+        onError={() => setImgOk(false)}
+        className={`relative rounded-full object-cover shadow-lg ring-2 ring-amber-300/40 transition-transform duration-300 ${
+          speaking ? "scale-[1.03]" : "scale-100"
+        }`}
+        style={{ width: size, height: size }}
+      />
+    </div>
+  );
 }
